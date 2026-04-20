@@ -175,7 +175,7 @@ export default function App() {
         flexShrink: 0,
       }}>
         <a href="/" style={{ textDecoration: 'none', color: '#111827', fontWeight: 700, fontSize: 17, letterSpacing: '-0.01em' }}>
-          🚤 DC, Maryland & Virginia Boat Ramps and Launch Sites
+          🚤 DMV Boat Ramps — Find boat ramps, kayak launches, and water access points across DC, Maryland & Virginia.
         </a>
         <nav style={{ display: 'flex', gap: 8 }} className="state-nav">
           {[
