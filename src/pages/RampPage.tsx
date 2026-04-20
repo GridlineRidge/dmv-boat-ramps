@@ -152,7 +152,7 @@ export default function RampPage() {
           {ramp.working_hours && (
             <InfoCard icon="🕐" label="Hours" value={ramp.working_hours} />
           )}
-          <InfoCard icon="📍" label="Coordinates" value={ramp.latitude.toFixed(5) + ', ' + ramp.longitude.toFixed(5)} />
+          {ramp.latitude != null && ramp.longitude != null && <InfoCard icon="📍" label="Coordinates" value={ramp.latitude.toFixed(5) + ', ' + ramp.longitude.toFixed(5)} />}
           {ramp.state && (
             <InfoCard icon="🗺️" label="State" value={stateName} />
           )}
