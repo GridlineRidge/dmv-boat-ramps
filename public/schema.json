@@ -1,0 +1,12 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DMV Boat Ramps",
+  "url": "https://dmvboatramps.com",
+  "description": "Find boat ramps, kayak launches, and water access points across DC, Virginia, and Maryland.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://dmvboatramps.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}

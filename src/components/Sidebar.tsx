@@ -290,6 +290,24 @@ export default function Sidebar({
           )
         })}
       </div>
+      {/* Advertisement slot — replace with AdSense unit */}
+      <div
+        data-ad-slot="sidebar-bottom"
+        style={{
+          height: 90,
+          background: '#e5e7eb',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#9ca3af',
+          fontSize: 12,
+          flexShrink: 0,
+          letterSpacing: '0.05em',
+        }}
+      >
+        {/* Replace with AdSense unit */}
+        Advertisement
+      </div>
     </div>
   )
 }
