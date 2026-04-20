@@ -1,2 +1,10 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { overflow: auto; }
+
+/* Hide state nav links on small screens */
+@media (max-width: 640px) {
+  .state-nav {
+    display: none !important;
+  }
+}
+

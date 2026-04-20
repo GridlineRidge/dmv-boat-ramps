@@ -157,13 +157,55 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex' }}>
-      {/* Map fills all space on mobile; left side on desktop */}
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      {/* Fixed top header */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 52,
+        background: '#ffffff',
+        borderBottom: '1px solid #e5e7eb',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 16px',
+        zIndex: 30,
+        flexShrink: 0,
+      }}>
+        <a href="/" style={{ textDecoration: 'none', color: '#111827', fontWeight: 700, fontSize: 17, letterSpacing: '-0.01em' }}>
+          🚤 DMV Boat Ramps
+        </a>
+        <nav style={{ display: 'flex', gap: 8 }} className="state-nav">
+          {[
+            { label: 'Virginia', href: '/state/virginia' },
+            { label: 'Maryland', href: '/state/maryland' },
+            { label: 'DC', href: '/state/dc' },
+          ].map(({ label, href }) => (
+            <a key={href} href={href} style={{
+              textDecoration: 'none',
+              color: '#374151',
+              fontSize: 14,
+              fontWeight: 500,
+              padding: '6px 12px',
+              borderRadius: 6,
+              transition: 'background 0.15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#f3f4f6')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >{label}</a>
+          ))}
+        </nav>
+      </header>
+
+      {/* Map fills all space on mobile; left side on desktop — offset by header */}
       <div
         ref={mapContainer}
         style={{
           flex: 1,
-          height: '100%',
+          height: 'calc(100vh - 52px)',
+          marginTop: 52,
           minWidth: 0,
         }}
       />
