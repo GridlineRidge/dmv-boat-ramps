@@ -199,30 +199,25 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Map fills all space on mobile; left side on desktop — offset by header */}
-      <div
-        ref={mapContainer}
-        style={{
-          flex: 1,
-          height: 'calc(100vh - 52px)',
-          marginTop: 52,
-          minWidth: 0,
-        }}
-      />
-
-      {/* Desktop sidebar */}
-      {!isMobile && ramps.length > 0 && (
-        <Sidebar
-          ramps={ramps}
-          selectedId={selectedId}
-          selectedRamp={selectedRamp}
-          onSelect={handleSelect}
-          onClearSelection={handleClearSelection}
-          totalCount={ramps.length}
-          isMobile={false}
-          isOpen={true}
+      {/* Row container: map + desktop sidebar side by side */}
+      <div style={{ display: 'flex', flexDirection: 'row', flex: 1, marginTop: 52, height: 'calc(100vh - 52px)', overflow: 'hidden' }}>
+        <div
+          ref={mapContainer}
+          style={{ flex: 1, height: '100%', minWidth: 0 }}
         />
-      )}
+        {!isMobile && ramps.length > 0 && (
+          <Sidebar
+            ramps={ramps}
+            selectedId={selectedId}
+            selectedRamp={selectedRamp}
+            onSelect={handleSelect}
+            onClearSelection={handleClearSelection}
+            totalCount={ramps.length}
+            isMobile={false}
+            isOpen={true}
+          />
+        )}
+      </div>
 
       {/* Mobile: bottom drawer sidebar */}
       {isMobile && ramps.length > 0 && (
