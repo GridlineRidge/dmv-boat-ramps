@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import { createClient } from '@supabase/supabase-js'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import './App.css'
+
 import Sidebar, { type Ramp } from './components/Sidebar'
 
 const supabase = createClient(
