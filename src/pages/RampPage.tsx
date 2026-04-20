@@ -174,6 +174,25 @@ export default function RampPage() {
           )}
         </div>
 
+
+        {/* Sponsored listing CTA */}
+        <div style={{ background: '#fefce8', border: '2px dashed #ca8a04', borderRadius: 12, padding: '20px 24px', marginBottom: 24 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: '#92400e', letterSpacing: '0.12em', textTransform: 'uppercase' as const, fontVariant: 'small-caps', marginBottom: 8 }}>Sponsored</div>
+          <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 800, color: '#1e293b' }}>Advertise Here</h2>
+          <p style={{ margin: '0 0 14px', fontSize: 14, color: '#374151', lineHeight: 1.6 }}>
+            Is your business near this ramp? Reach boaters searching for <strong>{ramp.name}</strong>. Sponsored listings start at $15/month.
+          </p>
+          <a
+            href={'mailto:sponsor@dmvboatramps.com?subject=' + encodeURIComponent('Sponsorship Inquiry') + '&body=' + encodeURIComponent('I\'m interested in a sponsored listing near ' + ramp.name + '.')}
+            style={{ display: 'inline-block', background: '#ca8a04', color: '#fff', padding: '9px 20px', borderRadius: 8, textDecoration: 'none', fontSize: 14, fontWeight: 700 }}
+          >
+            Get Listed
+          </a>
+          <p style={{ margin: '12px 0 0', fontSize: 11, color: '#78716c', lineHeight: 1.5 }}>
+            Sponsored listings are paid advertisements and are not affiliated with or endorsed by this site or any government entity.
+          </p>
+        </div>
+
         <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <div style={{ fontWeight: 700, color: '#1e293b', marginBottom: 2 }}>More boat ramps in {stateName}</div>
