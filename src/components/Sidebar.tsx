@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 
 export interface Ramp {
   id: string
@@ -232,6 +233,25 @@ export default function Sidebar({
                   🔗 Visit Website
                 </a>
               )}
+              <Link
+                to={'/ramp/' + selectedRamp.id}
+                style={{
+                  fontSize: 13,
+                  color: '#fff',
+                  background: '#2563eb',
+                  textDecoration: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  padding: '6px 12px',
+                  borderRadius: 6,
+                  fontWeight: 600,
+                  marginTop: 4,
+                  alignSelf: 'flex-start',
+                }}
+              >
+                View Full Page →
+              </Link>
             </div>
           </div>
         </div>
