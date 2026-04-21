@@ -167,11 +167,12 @@ export default function Sidebar({
             ← Back to list
           </button>
 
-          {selectedRamp.street_view && (
+          {selectedRamp.latitude && selectedRamp.longitude && (
             <img
-              src={selectedRamp.street_view}
+              src={`https://maps.googleapis.com/maps/api/streetview?size=640x320&location=${selectedRamp.latitude},${selectedRamp.longitude}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`}
               alt={selectedRamp.name}
               style={{ width: '100%', display: 'block', maxHeight: 160, objectFit: 'cover' }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           )}
 
