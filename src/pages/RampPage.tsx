@@ -119,12 +119,13 @@ export default function RampPage() {
           <span style={{ color: '#374151' }}>{ramp.name}</span>
         </nav>
 
-        {ramp.street_view && (
+        {ramp.latitude != null && ramp.longitude != null && (
           <div style={{ borderRadius: 12, overflow: 'hidden', marginBottom: 24, boxShadow: '0 2px 12px rgba(0,0,0,0.1)' }}>
             <img
-              src={ramp.street_view}
+              src={`https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${ramp.latitude},${ramp.longitude}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`}
               alt={'Street view of ' + ramp.name}
               style={{ width: '100%', display: 'block', maxHeight: 360, objectFit: 'cover' }}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
             />
           </div>
         )}
@@ -188,6 +189,9 @@ export default function RampPage() {
           >
             Get Listed
           </a>
+          <p style={{ margin: '8px 0 0', fontSize: 12, color: '#78716c' }}>
+            Or email: <a href="mailto:sponsor@dmvboatramps.com" style={{ color: '#92400e' }}>sponsor@dmvboatramps.com</a>
+          </p>
           <p style={{ margin: '12px 0 0', fontSize: 11, color: '#78716c', lineHeight: 1.5 }}>
             Sponsored listings are paid advertisements and are not affiliated with or endorsed by this site or any government entity.
           </p>
