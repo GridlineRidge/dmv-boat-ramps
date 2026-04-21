@@ -177,26 +177,7 @@ export default function RampPage() {
 
 
         {/* Sponsored listing CTA */}
-        <div style={{ background: '#fefce8', border: '2px dashed #ca8a04', borderRadius: 12, padding: '20px 24px', marginBottom: 24 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: '#92400e', letterSpacing: '0.12em', textTransform: 'uppercase' as const, fontVariant: 'small-caps', marginBottom: 8 }}>Sponsored</div>
-          <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 800, color: '#1e293b' }}>Advertise Here</h2>
-          <p style={{ margin: '0 0 14px', fontSize: 14, color: '#374151', lineHeight: 1.6 }}>
-            Is your business near this ramp? Reach boaters searching for <strong>{ramp.name}</strong>. Sponsored listings start at $15/month.
-          </p>
-          <a
-            href={'mailto:sponsor@dmvboatramps.com?subject=' + encodeURIComponent('Sponsorship Inquiry') + '&body=' + encodeURIComponent('I\'m interested in a sponsored listing near ' + ramp.name + '.')}
-            style={{ display: 'inline-block', background: '#ca8a04', color: '#fff', padding: '9px 20px', borderRadius: 8, textDecoration: 'none', fontSize: 14, fontWeight: 700 }}
-          >
-            Get Listed
-          </a>
-          <p style={{ margin: '8px 0 0', fontSize: 12, color: '#78716c' }}>
-            Or email: <a href="mailto:sponsor@dmvboatramps.com" style={{ color: '#92400e' }}>sponsor@dmvboatramps.com</a>
-          </p>
-          <p style={{ margin: '12px 0 0', fontSize: 11, color: '#78716c', lineHeight: 1.5 }}>
-            Sponsored listings are paid advertisements and are not affiliated with or endorsed by this site or any government entity.
-          </p>
-        </div>
-
+        <SponsorForm rampName={ramp.name} />
         <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div>
             <div style={{ fontWeight: 700, color: '#1e293b', marginBottom: 2 }}>More boat ramps in {stateName}</div>
@@ -236,5 +217,76 @@ function ActionLink({ href, icon, label }: { href: string; icon: string; label: 
       <span style={{ color: '#2563eb' }}>{label}</span>
       <span style={{ marginLeft: 'auto', color: '#9ca3af' }}>↗</span>
     </a>
+  )
+}
+
+function SponsorForm({ rampName }: { rampName: string }) {
+  const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setSending(true)
+    try {
+      const res = await fetch(`https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID ?? 'xpwzgqbd'}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name, email, message, ramp: rampName }),
+      })
+      if (res.ok) setSubmitted(true)
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const inputStyle: React.CSSProperties = {
+    width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #d1d5db',
+    fontSize: 14, fontFamily: 'inherit', boxSizing: 'border-box', marginTop: 4,
+  }
+
+  return (
+    <div style={{ background: '#fefce8', border: '2px dashed #ca8a04', borderRadius: 12, padding: '20px 24px', marginBottom: 24 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, color: '#92400e', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 8 }}>Sponsored</div>
+      <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 800, color: '#1e293b' }}>Advertise Here</h2>
+      <p style={{ margin: '0 0 16px', fontSize: 14, color: '#374151', lineHeight: 1.6 }}>
+        Is your business near this ramp? Reach boaters searching for <strong>{rampName}</strong>. Sponsored listings start at $15/month.
+      </p>
+      {submitted ? (
+        <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 8, padding: '12px 16px', color: '#15803d', fontSize: 14, fontWeight: 600 }}>
+          ✅ Thanks! We'll be in touch soon.
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Your Name
+              <input required value={name} onChange={e => setName(e.target.value)} style={inputStyle} placeholder="Jane Smith" />
+            </label>
+          </div>
+          <div>
+            <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Email Address
+              <input required type="email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} placeholder="jane@yourbusiness.com" />
+            </label>
+          </div>
+          <div>
+            <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Message (optional)
+              <textarea value={message} onChange={e => setMessage(e.target.value)} rows={3} style={{ ...inputStyle, resize: 'vertical' }} placeholder={'Tell us about your business near ' + rampName} />
+            </label>
+          </div>
+          <button
+            type="submit"
+            disabled={sending}
+            style={{ alignSelf: 'flex-start', background: '#ca8a04', color: '#fff', padding: '9px 20px', borderRadius: 8, border: 'none', fontSize: 14, fontWeight: 700, cursor: sending ? 'wait' : 'pointer' }}
+          >
+            {sending ? 'Sending…' : 'Get Listed'}
+          </button>
+        </form>
+      )}
+      <p style={{ margin: '12px 0 0', fontSize: 11, color: '#78716c', lineHeight: 1.5 }}>
+        Sponsored listings are paid advertisements and are not affiliated with or endorsed by this site or any government entity.
+      </p>
+    </div>
   )
 }
