@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useForm, ValidationError } from '@formspree/react'
 import { useParams, Link } from 'react-router-dom'
 import { createClient } from '@supabase/supabase-js'
 
@@ -221,26 +222,7 @@ function ActionLink({ href, icon, label }: { href: string; icon: string; label: 
 }
 
 function SponsorForm({ rampName }: { rampName: string }) {
-  const [submitted, setSubmitted] = useState(false)
-  const [sending, setSending] = useState(false)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSending(true)
-    try {
-      const res = await fetch(`https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID ?? 'xpwzgqbd'}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ name, email, message, ramp: rampName }),
-      })
-      if (res.ok) setSubmitted(true)
-    } finally {
-      setSending(false)
-    }
-  }
+  const [state, handleSubmit] = useForm('xjgjaeke')
 
   const inputStyle: React.CSSProperties = {
     width: '100%', padding: '8px 12px', borderRadius: 8, border: '1px solid #d1d5db',
@@ -254,33 +236,35 @@ function SponsorForm({ rampName }: { rampName: string }) {
       <p style={{ margin: '0 0 16px', fontSize: 14, color: '#374151', lineHeight: 1.6 }}>
         Is your business near this ramp? Reach boaters searching for <strong>{rampName}</strong>. Sponsored listings start at $15/month.
       </p>
-      {submitted ? (
+      {state.succeeded ? (
         <div style={{ background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 8, padding: '12px 16px', color: '#15803d', fontSize: 14, fontWeight: 600 }}>
           ✅ Thanks! We'll be in touch soon.
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <input type="hidden" name="ramp" value={rampName} />
           <div>
             <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Your Name
-              <input required value={name} onChange={e => setName(e.target.value)} style={inputStyle} placeholder="Jane Smith" />
+              <input name="name" required style={inputStyle} placeholder="Jane Smith" />
             </label>
           </div>
           <div>
             <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Email Address
-              <input required type="email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} placeholder="jane@yourbusiness.com" />
+              <input type="email" name="email" required style={inputStyle} placeholder="jane@yourbusiness.com" />
             </label>
+            <ValidationError field="email" errors={state.errors} style={{ color: '#dc2626', fontSize: 12, marginTop: 4, display: 'block' }} />
           </div>
           <div>
             <label style={{ fontSize: 13, fontWeight: 600, color: '#374151' }}>Message (optional)
-              <textarea value={message} onChange={e => setMessage(e.target.value)} rows={3} style={{ ...inputStyle, resize: 'vertical' }} placeholder={'Tell us about your business near ' + rampName} />
+              <textarea name="message" rows={3} style={{ ...inputStyle, resize: 'vertical' }} placeholder={'Tell us about your business near ' + rampName} />
             </label>
           </div>
           <button
             type="submit"
-            disabled={sending}
-            style={{ alignSelf: 'flex-start', background: '#ca8a04', color: '#fff', padding: '9px 20px', borderRadius: 8, border: 'none', fontSize: 14, fontWeight: 700, cursor: sending ? 'wait' : 'pointer' }}
+            disabled={state.submitting}
+            style={{ alignSelf: 'flex-start', background: '#ca8a04', color: '#fff', padding: '9px 20px', borderRadius: 8, border: 'none', fontSize: 14, fontWeight: 700, cursor: state.submitting ? 'wait' : 'pointer' }}
           >
-            {sending ? 'Sending…' : 'Get Listed'}
+            {state.submitting ? 'Sending…' : 'Get Listed'}
           </button>
         </form>
       )}
