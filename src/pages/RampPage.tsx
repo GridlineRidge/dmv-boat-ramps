@@ -149,7 +149,7 @@ export default function RampPage() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 28 }}>
           {ramp.reviews > 0 && (
-            <InfoCard icon="⭐" label="Google Reviews" value={Number(ramp.reviews).toLocaleString() + ' reviews'} />
+            <InfoCard icon="⭐" label="Google Reviews" value={Number(ramp.reviews).toLocaleString() + ' reviews'} href={ramp.location_link || undefined} />
           )}
           {ramp.working_hours && (
             <InfoCard icon="🕐" label="Hours" value={ramp.working_hours} />
@@ -196,14 +196,15 @@ export default function RampPage() {
   )
 }
 
-function InfoCard({ icon, label, value }: { icon: string; label: string; value: string }) {
-  return (
-    <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 10, padding: '14px 16px' }}>
+function InfoCard({ icon, label, value, href }: { icon: string; label: string; value: string; href?: string }) {
+  const inner = (
+    <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 10, padding: '14px 16px', textDecoration: 'none', color: 'inherit', display: 'block' }}>
       <div style={{ fontSize: 20, marginBottom: 4 }}>{icon}</div>
       <div style={{ fontSize: 11, fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>{label}</div>
-      <div style={{ fontSize: 14, fontWeight: 600, color: '#1e293b' }}>{value}</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: href ? '#2563eb' : '#1e293b' }}>{value}</div>
     </div>
   )
+  return href ? <a href={href} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>{inner}</a> : inner
 }
 
 function ActionLink({ href, icon, label }: { href: string; icon: string; label: string }) {
