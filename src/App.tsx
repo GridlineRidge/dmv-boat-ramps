@@ -61,7 +61,7 @@ export default function App() {
     map.on('load', async () => {
       const { data, error } = await supabase
         .from('ramps')
-        .select('id, name, full_address, latitude, longitude, state, reviews, site, street_view, location_link')
+        .select('id, name, full_address, latitude, longitude, state, reviews, rating, site, street_view, location_link, phone, photo, place_id, google_id, city, county, category, subtypes, business_status, working_hours, description')
         .not('latitude', 'is', null)
         .not('longitude', 'is', null)
 

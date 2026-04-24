@@ -9,9 +9,21 @@ export interface Ramp {
   longitude: number
   state: string
   reviews: number
+  rating: number
   site: string
   street_view: string
   location_link: string
+  phone: string
+  photo: string
+  place_id: string
+  google_id: string
+  city: string
+  county: string
+  category: string
+  subtypes: string
+  business_status: string
+  working_hours: string
+  description: string
 }
 
 interface SidebarProps {
@@ -204,14 +216,22 @@ export default function Sidebar({
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {selectedRamp.reviews > 0 && selectedRamp.location_link && (
+              {(selectedRamp.rating > 0 || selectedRamp.reviews > 0) && selectedRamp.location_link && (
                 <a
                   href={selectedRamp.location_link}
                   target="_blank"
                   rel="noreferrer"
                   style={{ fontSize: 13, color: '#2563eb', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
                 >
-                  ⭐ {Number(selectedRamp.reviews).toLocaleString()} Google reviews
+                  {selectedRamp.rating > 0 ? `★ ${selectedRamp.rating.toFixed(1)}` : '⭐'}{selectedRamp.reviews > 0 ? ` (${Number(selectedRamp.reviews).toLocaleString()} reviews)` : ''}
+                </a>
+              )}
+              {selectedRamp.phone && (
+                <a
+                  href={'tel:' + selectedRamp.phone}
+                  style={{ fontSize: 13, color: '#2563eb', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
+                >
+                  📞 {selectedRamp.phone}
                 </a>
               )}
               {selectedRamp.location_link && (
@@ -301,9 +321,14 @@ export default function Sidebar({
                     {ramp.state}
                   </span>
                 )}
+                {ramp.rating > 0 && (
+                  <span style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600 }}>
+                    ★ {ramp.rating.toFixed(1)}
+                  </span>
+                )}
                 {ramp.reviews > 0 && (
                   <span style={{ fontSize: 11, color: '#6b7280' }}>
-                    ⭐ {Number(ramp.reviews).toLocaleString()} reviews
+                    ({Number(ramp.reviews).toLocaleString()})
                   </span>
                 )}
               </div>

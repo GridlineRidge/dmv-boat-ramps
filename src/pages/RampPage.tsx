@@ -16,11 +16,20 @@ interface Ramp {
   longitude: number
   state: string
   reviews: number
+  rating: number
   site: string
   working_hours: string
   description: string
   street_view: string
   location_link: string
+  phone: string
+  photo: string
+  place_id: string
+  city: string
+  county: string
+  category: string
+  subtypes: string
+  business_status: string
 }
 
 const STATE_NAMES: Record<string, string> = {
@@ -120,13 +129,20 @@ export default function RampPage() {
           <span style={{ color: '#374151' }}>{ramp.name}</span>
         </nav>
 
-        {ramp.latitude != null && ramp.longitude != null && (
+        {(ramp.latitude != null && ramp.longitude != null || ramp.photo) && (
           <div style={{ borderRadius: 12, overflow: 'hidden', marginBottom: 24, boxShadow: '0 2px 12px rgba(0,0,0,0.1)' }}>
             <img
-              src={`https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${ramp.latitude},${ramp.longitude}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`}
-              alt={'Street view of ' + ramp.name}
+              src={ramp.photo || `https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${ramp.latitude},${ramp.longitude}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`}
+              alt={'Photo of ' + ramp.name}
               style={{ width: '100%', display: 'block', maxHeight: 360, objectFit: 'cover' }}
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+              onError={(e) => {
+                const img = e.target as HTMLImageElement
+                if (ramp.photo && img.src === ramp.photo && ramp.latitude != null) {
+                  img.src = `https://maps.googleapis.com/maps/api/streetview?size=800x400&location=${ramp.latitude},${ramp.longitude}&key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}`
+                } else {
+                  img.style.display = 'none'
+                }
+              }}
             />
           </div>
         )}
@@ -148,8 +164,17 @@ export default function RampPage() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 28 }}>
-          {ramp.reviews > 0 && (
+          {ramp.rating > 0 && (
+            <InfoCard icon="★" label="Rating" value={ramp.rating.toFixed(1) + (ramp.reviews > 0 ? ' (' + Number(ramp.reviews).toLocaleString() + ' reviews)' : '')} href={ramp.location_link || undefined} />
+          )}
+          {!ramp.rating && ramp.reviews > 0 && (
             <InfoCard icon="⭐" label="Google Reviews" value={Number(ramp.reviews).toLocaleString() + ' reviews'} href={ramp.location_link || undefined} />
+          )}
+          {ramp.phone && (
+            <InfoCard icon="📞" label="Phone" value={ramp.phone} href={'tel:' + ramp.phone} />
+          )}
+          {ramp.city && (
+            <InfoCard icon="🏙️" label="City" value={ramp.city} />
           )}
           {ramp.working_hours && (
             <InfoCard icon="🕐" label="Hours" value={ramp.working_hours} />
