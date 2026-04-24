@@ -59,15 +59,26 @@ export default function App() {
     map.addControl(new mapboxgl.NavigationControl(), 'top-right')
 
     map.on('load', async () => {
-      const { data, error } = await supabase
-        .from('ramps')
-        .select('id, name, full_address, latitude, longitude, state, reviews, rating, site, street_view, location_link, phone, photo, place_id, google_id, city, county, category, subtypes, business_status, working_hours, description')
-        .not('latitude', 'is', null)
-        .not('longitude', 'is', null)
+      // Paginate past Supabase's 1000-row default limit
+      const allRamps: Ramp[] = []
+      const PAGE = 1000
+      let from = 0
+      while (true) {
+        const { data, error } = await supabase
+          .from('ramps')
+          .select('id, name, full_address, latitude, longitude, state, reviews, rating, site, street_view, location_link, phone, photo, place_id, google_id, city, county, category, subtypes, business_status, working_hours, description')
+          .not('latitude', 'is', null)
+          .not('longitude', 'is', null)
+          .range(from, from + PAGE - 1)
+        if (error || !data || data.length === 0) break
+        allRamps.push(...(data as Ramp[]))
+        if (data.length < PAGE) break
+        from += PAGE
+      }
 
-      if (error || !data || data.length === 0) return
+      if (allRamps.length === 0) return
 
-      const rampsData = data as Ramp[]
+      const rampsData = allRamps
       setRamps(rampsData)
 
       map.addSource('ramps', {
